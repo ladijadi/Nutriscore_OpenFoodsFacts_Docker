@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request
 import pandas as pd
 from .models import load_model_pipeline
+import os
 
 # Blueprint for API and main routes
 api = Blueprint('api', __name__)
@@ -37,21 +38,15 @@ def predict():
         }
         prediction_grade = prediction_mapping.get(prediction, prediction)
 
+        # Vérification et création du dossier /data s'il n'existe pas
+        if not os.path.exists("/data"):
+            os.makedirs("/data")
+
         # Save prediction and input data to the volume-mounted file
         with open("/data/predictions.txt", "a") as f:
             print("Attempting to write to predictions.txt")
             f.write(f"Input: {input_data}, Prediction: {prediction_grade}\n")
-            print("Write successful")
 
-        # Return prediction result as JSON
-        return jsonify({"prediction": prediction_grade})
-
+        return jsonify({'prediction': prediction_grade})
     except Exception as e:
-        # Log any errors encountered during prediction
-        print(f"Error during prediction: {e}")
-        try:
-            with open("/data/error_log.txt", "a") as error_log:
-                error_log.write(f"Error: {e}\n")
-        except Exception as log_error:
-            print(f"Error writing to error_log.txt: {log_error}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
