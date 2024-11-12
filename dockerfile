@@ -1,21 +1,20 @@
-# Utiliser une image Python de base
-FROM python:3.9
+# Utiliser une image de base officielle de Python
+FROM python:3.10-slim
 
-# Définir le répertoire de travail
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier les dépendances et installer les bibliothèques Python
-COPY requirements.txt /app/
+# Copier le fichier requirements.txt dans le conteneur
+COPY requirements.txt .
+
+# Installer les dépendances listées dans requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier tout le code du projet dans le conteneur
-COPY . /app
+# Copier le reste des fichiers de l'application dans le conteneur
+COPY . .
 
-# Exposer le port de l'application Flask
+# Exposer le port utilisé par l'application Flask
 EXPOSE 5000
 
-# Définir une variable d'environnement pour signaler l'exécution dans Docker
-ENV FLASK_RUN_IN_DOCKER=1
-
-# Commande pour lancer l'application
-CMD ["python", "run.py"]
+# Commande pour démarrer l'application
+CMD ["python", "app.py", "--host='0.0.0.0'","--port=5000"]
