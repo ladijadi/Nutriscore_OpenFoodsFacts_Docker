@@ -4,6 +4,9 @@ FROM python:3.9-slim
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
+# Créez le volume pour /data
+VOLUME /data
+
 # Copier le dépôt GitHub cloné dans le répertoire de travail du conteneur
 COPY . .
 
