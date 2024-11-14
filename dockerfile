@@ -10,8 +10,8 @@ COPY . .
 # Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Exposer le port pour l'API
-EXPOSE 5000
+# Expose le port pour l'API
+EXPOSE 8000
 
 # Commande pour démarrer l'application
-CMD ["python", "app.py", "--host='0.0.0.0'","--port=5000"]
+CMD ["python", "app.py", "--host='0.0.0.0'","--port=8000"]
